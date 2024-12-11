@@ -7,6 +7,7 @@
 
 #include <assert.h>
 #include <stdint.h>
+#include <string.h>
 
 struct cmdbuff {
 	uint8_t buff[32];
@@ -22,6 +23,11 @@ static inline void cmdbuff_push(struct cmdbuff *cmdbuff, uint8_t value)
 	assert(cmdbuff->pos < sizeof(cmdbuff->buff));
 
 	cmdbuff->buff[cmdbuff->pos++] = value;
+}
+
+static inline void cmdbuff_reset(struct cmdbuff *cmdbuff)
+{
+	memset(cmdbuff->buff, 0, sizeof(cmdbuff->buff));
 }
 
 #endif /* SRC_CMDBUFF_H_ */
