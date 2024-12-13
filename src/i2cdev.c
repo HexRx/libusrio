@@ -17,6 +17,13 @@ struct i2cdev_priv {
 	struct libusrio_i2c_data libusrio_i2c_data;
 };
 
+static int i2c_controller_i2cdev_init(const struct i2c_controller *i2c_controller,
+			   int(*log_cb)(int level, const char *tag, const char *restrict format,...),
+			   void *priv)
+{
+	return 0;
+}
+
 static int i2c_controller_i2cdev_open(const struct i2c_controller *i2c_controller,
 		int(*log_cb)(int level, const char *tag, const char *restrict format,...),
 		const char *connection, void **priv)
@@ -79,10 +86,19 @@ static int i2c_controller_i2cdevdo_shutdown(const struct i2c_controller *i2c_con
 	return 0;
 }
 
+static struct libusrio_i2c_data *i2c_controller_i2cdev_get_libusrio_data(const struct i2c_controller *i2c_controller, void *priv)
+{
+	struct i2cdev_priv *ch341a = priv;
+
+	return &ch341a->libusrio_i2c_data;
+}
+
 const struct i2c_controller i2cdev_i2c = {
 	.name = "i2cdev",
+	.init = i2c_controller_i2cdev_init,
 	.open = i2c_controller_i2cdev_open,
 	.do_transaction =  i2c_controller_i2cdevdo_transaction,
 	.shutdown = i2c_controller_i2cdevdo_shutdown,
+	.get_libusrio_data = i2c_controller_i2cdev_get_libusrio_data,
 };
 
